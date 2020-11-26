@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
         removedItems.remove(0);
     }
     public int getIndex(ArrayList<String> s){
-        
+
         return 0;
     }
 }
