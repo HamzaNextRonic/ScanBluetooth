@@ -25,14 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import com.example.joelwasserman.androidbletutorial.model.DataModel;
+import com.example.joelwasserman.androidbletutorial.model.MyData;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,8 +49,14 @@ public class MainActivity extends AppCompatActivity {
     private static RecyclerView recyclerView;
     //private static ArrayList<DataModel> data;
     static View.OnClickListener myOnClickListener;
-   //private static ArrayList<Integer> removedItems;
-   private static ArrayList<Integer> removedItems;
+   //private  ArrayList<String> nameArray;
+   // private  ArrayList<String> addressArray;
+   // private  ArrayList<String> adressArray;
+  //  private  ArrayList<String> adressArray;
+
+   private static ArrayList<String> removedItems;
+    private static ArrayList<DataModel> data;
+    private static MyData myData;
 
     private final static int REQUEST_ENABLE_BT = 1;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
@@ -59,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        myData.addressArray =  new ArrayList<String>();
+        myData.nameArray    = new ArrayList<String>();
+        myData.timeArray    = new ArrayList<String>();
+        myData.valeurArray  = new ArrayList<String>();
+        myData.timeArray    = new ArrayList<String>();
 
         /********************************/
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -72,6 +84,15 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        layoutManager = new LinearLayoutManager(this);
+
+        data = new ArrayList<DataModel>();
+
+
+        removedItems = new ArrayList<String>();
+
+        adapter = new CustomAdapter(data);
+        recyclerView.setAdapter(adapter);
 
         /*********************************************************/
 
@@ -123,8 +144,26 @@ public class MainActivity extends AppCompatActivity {
     private ScanCallback leScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            byte[] mScanRecord = result.getScanRecord().getBytes();
 
+
+            //byte[] mScanRecord = result.getScanRecord().getBytes();
+            myData.addressArray.add(result.getDevice().getAddress()) ;
+
+            myData.nameArray.add(result.getDevice().getName());
+            myData.timeArray.add(result.getDevice().getName());
+            myData.valeurArray.add(result.getScanRecord().getBytes().toString());
+
+            for (int i = 0; i < myData.nameArray.size(); i++) {
+                data.add(new DataModel(
+                        myData.nameArray.get(i),
+                        myData.addressArray.get(i),
+                        myData.timeArray.get(i),
+                        myData.valeurArray.get(i)
+                ));
+            }
+
+
+          //  Log.d("mydata",myData.toString());
 
 
 
@@ -132,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
             peripheralTextView.append("Device Name: " + result.getDevice().getName() + "\n"+ " data: " + result.getScanRecord().getBytes() + "\n");
             //SensorViewHolder holder ;
             //holder.nameSensor.setText(result.getDevice().getName());
-           // byte[] a = result.getScanRecord().getBytes(StandardCharsets.UTF_8);
-          // Log.d("result 1: ", result.getScanRecord().getBytes(StandardCharsets.UTF_8).toString() + " name : " + result.getDevice().getName());
+
+           // Log.d("result 1: ", result.getScanRecord().getBytes(StandardCharsets.UTF_8).toString() + " name : " + result.getDevice().getName());
             Log.d("result 2: ",result.getDevice().toString()+" name : "+result.getDevice().getName());
             Log.d("result 3: ",result.toString()+" name : "+result.getDevice().getName());
 
@@ -200,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+/********************************************************************************************************/
     private static class MyOnClickListener implements View.OnClickListener {
 
         private final Context context;
@@ -218,11 +257,14 @@ public class MainActivity extends AppCompatActivity {
             int selectedItemPosition = recyclerView.getChildPosition(v);
             RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForPosition(selectedItemPosition);
             TextView textViewName = (TextView) viewHolder.itemView.findViewById(R.id.nameSensor);
+
             String selectedName = (String) textViewName.getText();
-            int selectedItemId = -1;
-            for (int i = 0; i < MyData.nameArray.length; i++) {
-                if (selectedName.equals(MyData.nameArray[i])) {
-                    selectedItemId = MyData.id_[i];
+            String selectedItemId = "";
+
+
+            for (int i = 0; i < myData.nameArray.size(); i++) {
+                if (selectedName.equals(myData.nameArray.get(i))) {
+                    selectedItemId = myData.addressArray.get(i);
                 }
             }
             removedItems.add(selectedItemId);
@@ -254,14 +296,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void addRemovedItemToList() {
         int addItemAtListPosition = 3;
+
         data.add(addItemAtListPosition, new DataModel(
-                MyData.nameArray[removedItems.get(0)],
-                MyData.versionArray[removedItems.get(0)],
-                MyData.id_[removedItems.get(0)],
-                MyData.drawableArray[removedItems.get(0)]
+                myData.nameArray.get(removedItems.get(0)) ,
+                myData.valeurArray.indexOf(removedItems.get(0)),
+                myData.addressArray.indexOf(removedItems.get(0)),
+                myData.timeArray.indexOf(removedItems.get(0))
         ));
         adapter.notifyItemInserted(addItemAtListPosition);
         removedItems.remove(0);
     }
+    public int getIndex(ArrayList<String> s){
+        
+        return 0;
+    }
 }
-}
+

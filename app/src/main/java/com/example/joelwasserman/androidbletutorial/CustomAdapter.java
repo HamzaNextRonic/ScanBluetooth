@@ -16,21 +16,9 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>{
     private ArrayList<DataModel> dataSet;
 
-    @NonNull
-    @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
-    }
 
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-    }
 
-    @Override
-    public int getItemCount() {
-        return 0;
-    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView valueTemperature,nameSensor,hymedityValue,notificationTextView,vebration;
@@ -48,6 +36,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public CustomAdapter(ArrayList<DataModel> data) {
         this.dataSet = data;
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -58,5 +47,28 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
+
+        TextView nameSensor = holder.nameSensor;
+        TextView valueTemperature = holder.valueTemperature;
+        TextView hymedityValue = holder.hymedityValue;
+        TextView notificationTextView = holder.notificationTextView;
+        //TextView vebration = holder.vebration;
+
+
+        nameSensor.setText(dataSet.get(listPosition).getName());
+        valueTemperature.setText(dataSet.get(listPosition).getValeur());
+        hymedityValue.setText(dataSet.get(listPosition).getTime());
+        notificationTextView.setText(dataSet.get(listPosition).getAddress());
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return dataSet.size();
     }
 }
