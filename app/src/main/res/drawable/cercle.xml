@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Larger blue circle in back
+
+    android:top="2dp"
+        android:right="2dp"
+        android:bottom="2dp"
+        android:left="2dp"-->
+
+
+    <item
+
+        >
+
+        <shape android:shape="oval">
+            <padding
+                android:bottom="20dp"
+                android:left="20dp"
+                android:right="20dp"
+                android:top="20dp" />
+
+            <solid android:color="#4cccf7"/>
+            <stroke android:color="#4cccf7"
+                android:width="15dp"/>
+            <size
+                android:width="100dp"
+                android:height="100dp"/>
+        </shape>
+    </item>
+    <!-- Smaller red circle in front -->
+
+    <item
+        >
+        <shape android:shape="oval">
+            <padding
+                android:bottom="20dp"
+                android:left="20dp"
+                android:right="20dp"
+                android:top="20dp" />
+            <!-- transparent stroke = larger_circle_size - smaller_circle_size -->
+            <stroke android:color="#4cccf7"
+                android:width="2dp"/>
+            <solid android:color="#62def5"/>
+            <size
+                android:width="100dp"
+                android:height="100dp"/>
+        </shape>
+    </item>
+    <item
+
+        >
+        <shape android:shape="oval">
+            <padding
+                android:bottom="20dp"
+                android:left="20dp"
+                android:right="20dp"
+                android:top="20dp" />
+            <!-- transparent stroke = larger_circle_size - smaller_circle_size -->
+            <stroke android:color="#56ecfc"
+                android:width="6dp"/>
+            <solid android:color="#56ecfc"/>
+            <size
+                android:width="100dp"
+                android:height="100dp"/>
+        </shape>
+    </item>
+    <item
+
+        >
+        <shape android:shape="oval">
+            <!-- transparent stroke = larger_circle_size - smaller_circle_size -->
+            <stroke android:color="#62def5"
+                android:width="0dp"/>
+            <solid android:color="#4b5f83"/>
+            <padding
+                android:bottom="20dp"
+                android:left="20dp"
+                android:right="20dp"
+                android:top="20dp" />
+            <size
+                android:width="90dp"
+                android:height="90dp">
+
+            </size>
+        </shape>
+    </item>
+
+
+</layer-list>

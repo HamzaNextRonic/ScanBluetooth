@@ -33,7 +33,6 @@ import com.example.joelwasserman.androidbletutorial.model.DataModel;
 import com.example.joelwasserman.androidbletutorial.model.MyData;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,12 +48,12 @@ public class MainActivity extends AppCompatActivity {
     private static RecyclerView recyclerView;
     //private static ArrayList<DataModel> data;
     static View.OnClickListener myOnClickListener;
-   //private  ArrayList<String> nameArray;
-   // private  ArrayList<String> addressArray;
-   // private  ArrayList<String> adressArray;
-  //  private  ArrayList<String> adressArray;
+    //private  ArrayList<String> nameArray;
+    // private  ArrayList<String> addressArray;
+    // private  ArrayList<String> adressArray;
+    //  private  ArrayList<String> adressArray;
 
-   private static ArrayList<String> removedItems;
+    private static ArrayList<String> removedItems;
     private static ArrayList<DataModel> data;
     private static MyData myData;
 
@@ -66,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myData.addressArray =  new ArrayList<String>();
-        myData.nameArray    = new ArrayList<String>();
-        myData.timeArray    = new ArrayList<String>();
-        myData.valeurArray  = new ArrayList<String>();
-        myData.timeArray    = new ArrayList<String>();
+        myData.addressArray = new ArrayList<String>();
+        myData.nameArray = new ArrayList<String>();
+        myData.timeArray = new ArrayList<String>();
+        myData.valeurArray = new ArrayList<String>();
+        myData.timeArray = new ArrayList<String>();
 
         /********************************/
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -91,13 +90,11 @@ public class MainActivity extends AppCompatActivity {
 
         removedItems = new ArrayList<String>();
 
-        adapter = new CustomAdapter(data);
-        recyclerView.setAdapter(adapter);
 
         /*********************************************************/
 
-        peripheralTextView = (TextView) findViewById(R.id.PeripheralTextView);
-        peripheralTextView.setMovementMethod(new ScrollingMovementMethod());
+        // peripheralTextView = (TextView) findViewById(R.id.PeripheralTextView);
+        //peripheralTextView.setMovementMethod(new ScrollingMovementMethod());
 
         startScanningButton = (Button) findViewById(R.id.StartScanButton);
         startScanningButton.setOnClickListener(new View.OnClickListener() {
@@ -114,14 +111,14 @@ public class MainActivity extends AppCompatActivity {
         });
         stopScanningButton.setVisibility(View.INVISIBLE);
 
-        btManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
+        btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         btAdapter = btManager.getAdapter();
         btScanner = btAdapter.getBluetoothLeScanner();
 
 
         if (btAdapter != null && !btAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent,REQUEST_ENABLE_BT);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
 
         // Make sure we have access coarse location enabled, if not, prompt the user to enable it
@@ -144,47 +141,45 @@ public class MainActivity extends AppCompatActivity {
     private ScanCallback leScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-
-
+            if (result.getDevice().getName() == null || result.getDevice().getName().isEmpty() || !result.getDevice().getName().startsWith("NXT")) {
+                return;
+            }
+            Log.d("get name", result.getDevice().getName());
             //byte[] mScanRecord = result.getScanRecord().getBytes();
-            myData.addressArray.add(result.getDevice().getAddress()) ;
-
+            myData.addressArray.add(result.getDevice().getAddress());
             myData.nameArray.add(result.getDevice().getName());
             myData.timeArray.add(result.getDevice().getName());
             myData.valeurArray.add(result.getScanRecord().getBytes().toString());
-
-            for (int i = 0; i < myData.nameArray.size(); i++) {
-                data.add(new DataModel(
-                        myData.nameArray.get(i),
-                        myData.addressArray.get(i),
-                        myData.timeArray.get(i),
-                        myData.valeurArray.get(i)
-                ));
+            for (int i =0; i< result.getScanRecord().getManufacturerSpecificData().size();i++){
+                if( result.getScanRecord().getManufacturerSpecificData().get(i) == null)
+                    break;
+                Log.d("test2", result.getScanRecord().getManufacturerSpecificData().get(i).toString());
+                //Log.d("test size", String.valueOf(result.getScanRecord().getManufacturerSpecificData().get(i).length()));
             }
+            data.add(new DataModel(
+                myData.nameArray.get(myData.nameArray.size()-1),
+                myData.addressArray.get(myData.addressArray.size()-1),
+                myData.timeArray.get(myData.timeArray.size()-1),
+                myData.valeurArray.get(myData.valeurArray.size()-1)
+            ));
 
+            adapter = new CustomAdapter(data);
+            recyclerView.setAdapter(adapter);
 
-          //  Log.d("mydata",myData.toString());
-
-
-
-
-            peripheralTextView.append("Device Name: " + result.getDevice().getName() + "\n"+ " data: " + result.getScanRecord().getBytes() + "\n");
+            // peripheralTextView.append("Device Name: " + result.getDevice().getName() + "\n"+ " data: " + result.getScanRecord().getBytes() + "\n");
             //SensorViewHolder holder ;
             //holder.nameSensor.setText(result.getDevice().getName());
 
-           // Log.d("result 1: ", result.getScanRecord().getBytes(StandardCharsets.UTF_8).toString() + " name : " + result.getDevice().getName());
-            Log.d("result 2: ",result.getDevice().toString()+" name : "+result.getDevice().getName());
-            Log.d("result 3: ",result.toString()+" name : "+result.getDevice().getName());
-
-
-
+            // Log.d("result 1: ", result.getScanRecord().getBytes(StandardCharsets.UTF_8).toString() + " name : " + result.getDevice().getName());
+            //Log.d("result 2: ", result.getDevice().toString() + " name : " + result.getDevice().getName());
+            //Log.d("result 3: ", result.toString() + " name : " + result.getDevice().getName());
 
 
             // auto scroll for text view
-            final int scrollAmount = peripheralTextView.getLayout().getLineTop(peripheralTextView.getLineCount()) - peripheralTextView.getHeight();
+         /*  final int scrollAmount = peripheralTextView.getLayout().getLineTop(peripheralTextView.getLineCount()) - peripheralTextView.getHeight();
             // if there is no need to scroll, scrollAmount will be <=0
             if (scrollAmount > 0)
-                peripheralTextView.scrollTo(0, scrollAmount);
+                peripheralTextView.scrollTo(0, scrollAmount);*/
         }
     };
 
@@ -216,7 +211,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void startScanning() {
         System.out.println("start scanning");
-        peripheralTextView.setText("");
+        //peripheralTextView.setText("");
+        recyclerView.setAdapter(null);
         startScanningButton.setVisibility(View.INVISIBLE);
         stopScanningButton.setVisibility(View.VISIBLE);
         AsyncTask.execute(new Runnable() {
@@ -229,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void stopScanning() {
         System.out.println("stopping scanning");
-        peripheralTextView.append("Stopped Scanning");
+//        peripheralTextView.append("Stopped Scanning");
         startScanningButton.setVisibility(View.VISIBLE);
         stopScanningButton.setVisibility(View.INVISIBLE);
         AsyncTask.execute(new Runnable() {
@@ -239,7 +235,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-/********************************************************************************************************/
+
+    /********************************************************************************************************/
     private static class MyOnClickListener implements View.OnClickListener {
 
         private final Context context;
@@ -298,17 +295,23 @@ public class MainActivity extends AppCompatActivity {
         int addItemAtListPosition = 3;
 
         data.add(addItemAtListPosition, new DataModel(
-                myData.nameArray.get(removedItems.get(0)) ,
-                myData.valeurArray.indexOf(removedItems.get(0)),
-                myData.addressArray.indexOf(removedItems.get(0)),
-                myData.timeArray.indexOf(removedItems.get(0))
+                myData.nameArray.get(getIndex(myData.nameArray, removedItems.get(0))),
+                myData.valeurArray.get(getIndex(myData.valeurArray, removedItems.get(0))),
+                myData.addressArray.get(getIndex(myData.addressArray, removedItems.get(0))),
+                myData.timeArray.get(getIndex(myData.timeArray, removedItems.get(0)))
         ));
         adapter.notifyItemInserted(addItemAtListPosition);
         removedItems.remove(0);
     }
-    public int getIndex(ArrayList<String> s){
 
-        return 0;
+    public int getIndex(ArrayList<String> mdata, String s) {
+        int result = 0;
+        for (int i = 0; i < mdata.size(); i++) {
+            if (mdata.get(i).equals(s))
+                result = i;
+        }
+
+        return result;
     }
 }
 

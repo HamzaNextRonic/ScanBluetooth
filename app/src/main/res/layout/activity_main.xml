@@ -64,15 +64,10 @@
         android:textColor="@android:color/white"
         android:textAllCaps="false"/>
 
-    <TextView
-        android:id="@+id/PeripheralTextView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="100dp"
-        android:maxLines="30"
-        android:scrollbars="vertical" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@+id/PeripheralTextView"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/StartScanButton"
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
