@@ -4,46 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_gravity="center"
+    android:id="@+id/relative1"
     android:background="#2bbff7"
-    android:orientation="horizontal">
+    tools:context=".LevelActivity">
+    <ImageView
+        android:id="@+id/celsuis"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="188dp"
-        android:layout_marginEnd="47dp"
-        android:layout_marginBottom="235dp"
+        android:layout_centerInParent="true"
+
+        android:src="@drawable/celsius" />
+    <Button
+        android:id="@+id/temperatureBtn"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_centerInParent="true"
         android:background="@drawable/cercle"
-        tools:context=".LevelActivity">
+        android:text="20.52 °C"
+        android:textColor="#fff"
+        android:textSize="40dp"
+        android:textStyle="bold" />
+    <Button
+        android:id="@+id/exit"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/log_out" />
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="99dp"
-            android:layout_marginBottom="90dp"
-            android:src="@drawable/celsius" />
-
-        <TextView
-            android:layout_width="150dp"
-            android:layout_height="60dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="55dp"
-            android:text="20.83"
-            android:textSize="50dp"
-            android:textStyle="bold"
-            android:textColor="#fff"/>
+    <Button
+        android:id="@+id/backword"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/backward" />
 
 
-    </RelativeLayout>
+
+
 </RelativeLayout>

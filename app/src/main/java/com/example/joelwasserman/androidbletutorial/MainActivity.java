@@ -15,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -247,7 +246,24 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            removeItem(v);
+           // removeItem(v);
+            /************************************/
+            int selectedItemPosition = recyclerView.getChildPosition(v);
+            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForPosition(selectedItemPosition);
+            TextView textViewName = (TextView) viewHolder.itemView.findViewById(R.id.nameSensor);
+
+            String selectedName = (String) textViewName.getText();
+            String selectedItemId = "";
+
+            for (int i = 0; i < myData.nameArray.size(); i++) {
+                if (selectedName.equals(myData.nameArray.get(i))) {
+                    selectedItemId = myData.valeurArray.get(i);
+                }
+            }
+            Intent intent = new Intent(context,LevelActivity.class);
+            intent.putExtra("valueTemperature",selectedItemId );
+            context.startActivity(intent);
+
         }
 
         private void removeItem(View v) {
