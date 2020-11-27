@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:layout_gravity="center"
-    android:background="#2bbff7"
+    android:background="#198219"
     android:orientation="horizontal">
 
     <RelativeLayout
@@ -20,7 +20,7 @@
         android:layout_marginTop="188dp"
         android:layout_marginEnd="47dp"
         android:layout_marginBottom="235dp"
-        android:background="@drawable/cercle"
+        android:background="@drawable/greencercle"
         tools:context=".LevelActivity">
 
         <ImageView
