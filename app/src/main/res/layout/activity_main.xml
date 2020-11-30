@@ -73,6 +73,18 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         />
+  <!--  <Button
+        android:layout_below="@+id/my_recycler_view"
 
+        android:text="test"
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_btn"
+        android:layout_marginTop="40dp"
+        android:textSize="16dp"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"/>
+        -->
 
 </RelativeLayout>

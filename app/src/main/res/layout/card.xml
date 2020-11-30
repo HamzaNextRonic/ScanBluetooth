@@ -97,7 +97,7 @@
                                 android:textColor="#DF6A90B5"
                                 android:fontFamily="@font/roboto_regular"
                                 android:layout_height="wrap_content"
-                                android:text="celsius" />
+                                android:text="Celsius" />
                         </LinearLayout>
 
                         <ImageView

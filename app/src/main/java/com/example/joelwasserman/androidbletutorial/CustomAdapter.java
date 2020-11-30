@@ -17,8 +17,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private ArrayList<DataModel> dataSet;
 
 
-
-
+    public CustomAdapter() {
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView valueTemperature,nameSensor,hymedityValue,notificationTextView,vebration;

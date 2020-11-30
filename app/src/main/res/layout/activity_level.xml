@@ -31,7 +31,7 @@
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/log_out" />
+        android:background="@drawable/log_out1" />
 
     <Button
         android:id="@+id/backword"

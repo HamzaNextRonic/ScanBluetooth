@@ -2,6 +2,8 @@ package com.example.joelwasserman.androidbletutorial;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -12,6 +14,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
@@ -24,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     Button startScanningButton;
     Button stopScanningButton;
     TextView peripheralTextView;
+    Button temperature;
+    Button testBtn;
     //*******************************************************
     private static RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -63,6 +71,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+      /*  testBtn = findViewById(R.id.test);
+        testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    Bitmap btm = BitmapFactory.decodeResource(getResources(),R.drawable.applogo);
+
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this)
+                            .setContentTitle("عنوان الرسالة")
+                            .setContentText("la Temperature  depasse 8")
+                            .setSmallIcon(R.drawable.applogo)
+                            .setLargeIcon(btm)
+                            .setAutoCancel(true)
+                            .setNumber(1);
+
+                    builder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+                    builder.setVibrate(new long[] {500, 1000, 500, 1000, 500});
+                    builder.setSound(Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.sound_notification));
+
+                    notificationManager.notify(1,builder.build());
+
+            }
+        });*/
 
         myData.addressArray = new ArrayList<String>();
         myData.nameArray = new ArrayList<String>();
@@ -143,24 +177,35 @@ public class MainActivity extends AppCompatActivity {
             if (result.getDevice().getName() == null || result.getDevice().getName().isEmpty() || !result.getDevice().getName().startsWith("NXT")) {
                 return;
             }
-            Log.d("get name", result.getDevice().getName());
+
+            byte []rawBytes = result.getScanRecord().getBytes();
+            //Log.d( "Rawbytes" ,byteArrayToHex(rawBytes ));
+            String valueT =byteArrayToHex(rawBytes );
+            valueT = valueT.substring(30,40);
+            //valueT = Integer.toHexString(Integer.parseInt(valueT));
+            valueT = HexToASCII(valueT);
+
+            Log.d("aaa",valueT);
+
             //byte[] mScanRecord = result.getScanRecord().getBytes();
             myData.addressArray.add(result.getDevice().getAddress());
             myData.nameArray.add(result.getDevice().getName());
-            myData.timeArray.add(result.getDevice().getName());
-            myData.valeurArray.add(result.getScanRecord().getBytes().toString());
+            myData.timeArray.add("valueT");
+            myData.valeurArray.add(valueT);
+            Log.d("mydata", myData.addressArray.toString());
             for (int i =0; i< result.getScanRecord().getManufacturerSpecificData().size();i++){
                 if( result.getScanRecord().getManufacturerSpecificData().get(i) == null)
                     break;
                 Log.d("test2", result.getScanRecord().getManufacturerSpecificData().get(i).toString());
-                //Log.d("test size", String.valueOf(result.getScanRecord().getManufacturerSpecificData().get(i).length()));
+
             }
             data.add(new DataModel(
-                myData.nameArray.get(myData.nameArray.size()-1),
-                myData.addressArray.get(myData.addressArray.size()-1),
-                myData.timeArray.get(myData.timeArray.size()-1),
-                myData.valeurArray.get(myData.valeurArray.size()-1)
+                    myData.nameArray.get(myData.nameArray.size()-1),
+                    myData.addressArray.get(myData.addressArray.size()-1),
+                    myData.valeurArray.get(myData.valeurArray.size()-1),
+                    myData.timeArray.get(myData.timeArray.size()-1)
             ));
+            Log.d("dataMM + length",data.get(0).getName()+" length : "+data.size());
 
             adapter = new CustomAdapter(data);
             recyclerView.setAdapter(adapter);
@@ -208,15 +253,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     public void startScanning() {
         System.out.println("start scanning");
         //peripheralTextView.setText("");
-        recyclerView.setAdapter(null);
+
+        recyclerView.removeAllViewsInLayout();
         startScanningButton.setVisibility(View.INVISIBLE);
         stopScanningButton.setVisibility(View.VISIBLE);
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                Log.d("leScanCallback",leScanCallback.getClass().toString());
                 btScanner.startScan(leScanCallback);
             }
         });
@@ -233,6 +281,26 @@ public class MainActivity extends AppCompatActivity {
                 btScanner.stopScan(leScanCallback);
             }
         });
+    }
+    public String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for(byte b: a)
+            sb.append(String.format("%02x", b & 0xff));
+        return sb.toString();
+    }
+
+    public String HexToASCII(String hex){
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < hex.length(); i = i + 2) {
+            // Step-1 Split the hex string into two character group
+            String s = hex.substring(i, i + 2);
+            // Step-2 Convert the each character group into integer using valueOf method
+            int n = Integer.valueOf(s, 16);
+            // Step-3 Cast the integer value to char
+            builder.append((char)n);
+        }
+        return  builder.toString();
     }
 
     /********************************************************************************************************/
@@ -261,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             Intent intent = new Intent(context,LevelActivity.class);
-            intent.putExtra("valueTemperature",selectedItemId );
+            intent.putExtra("valueTemperature",selectedItemId);
             context.startActivity(intent);
 
         }
