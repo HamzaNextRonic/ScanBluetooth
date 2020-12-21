@@ -19,7 +19,7 @@
                 android:right="20dp"
                 android:top="20dp" />
 
-            <solid android:color="#4cccf7"/>
+                <solid android:color="#4cccf7"/>
             <stroke android:color="#4cccf7"
                 android:width="15dp"/>
             <size

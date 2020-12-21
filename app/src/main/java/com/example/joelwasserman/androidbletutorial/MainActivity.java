@@ -174,10 +174,14 @@ public class MainActivity extends AppCompatActivity {
     private ScanCallback leScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            if (result.getDevice().getName() == null || result.getDevice().getName().isEmpty() || !result.getDevice().getName().startsWith("NXT")) {
+            int k=0;
+            int j=k+1;
+            if (result.getDevice().getName() == null || result.getDevice().getName().isEmpty() || !result.getDevice().getName().startsWith("NXT") ) {
                 return;
             }
 
+
+            Log.d("size", String.valueOf(result.getDevice().getAddress().length()));
             byte []rawBytes = result.getScanRecord().getBytes();
             //Log.d( "Rawbytes" ,byteArrayToHex(rawBytes ));
             String valueT =byteArrayToHex(rawBytes );
@@ -188,11 +192,14 @@ public class MainActivity extends AppCompatActivity {
             Log.d("aaa",valueT);
 
             //byte[] mScanRecord = result.getScanRecord().getBytes();
-            myData.addressArray.add(result.getDevice().getAddress());
-            myData.nameArray.add(result.getDevice().getName());
-            myData.timeArray.add("valueT");
-            myData.valeurArray.add(valueT);
-            Log.d("mydata", myData.addressArray.toString());
+            if(!myData.addressArray.get(result.getDevice().getAddress().length()- (result.getDevice().getAddress().length() -k) ).equals(myData.addressArray.get(result.getDevice().getAddress().length()- (result.getDevice().getAddress().length() -j) ))){
+                myData.addressArray.add(result.getDevice().getAddress());
+                myData.nameArray.add(result.getDevice().getName());
+                myData.timeArray.add("valueT");
+                myData.valeurArray.add(valueT);
+                Log.d("mydata", myData.addressArray.toString());
+            }
+
             for (int i =0; i< result.getScanRecord().getManufacturerSpecificData().size();i++){
                 if( result.getScanRecord().getManufacturerSpecificData().get(i) == null)
                     break;
