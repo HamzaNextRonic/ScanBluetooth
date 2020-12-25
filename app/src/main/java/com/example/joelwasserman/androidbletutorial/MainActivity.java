@@ -183,36 +183,54 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d("size", String.valueOf(result.getDevice().getAddress().length()));
             byte []rawBytes = result.getScanRecord().getBytes();
-            //Log.d( "Rawbytes" ,byteArrayToHex(rawBytes ));
+            Log.d( "Rawbytes" ,byteArrayToHex(rawBytes ));
             String valueT =byteArrayToHex(rawBytes );
-            valueT = valueT.substring(30,40);
+            valueT = valueT.substring(32,42);
             //valueT = Integer.toHexString(Integer.parseInt(valueT));
             valueT = HexToASCII(valueT);
 
             Log.d("aaa",valueT);
 
             //byte[] mScanRecord = result.getScanRecord().getBytes();
-            if(!myData.addressArray.get(result.getDevice().getAddress().length()- (result.getDevice().getAddress().length() -k) ).equals(myData.addressArray.get(result.getDevice().getAddress().length()- (result.getDevice().getAddress().length() -j) ))){
+
                 myData.addressArray.add(result.getDevice().getAddress());
                 myData.nameArray.add(result.getDevice().getName());
                 myData.timeArray.add("valueT");
                 myData.valeurArray.add(valueT);
-                Log.d("mydata", myData.addressArray.toString());
-            }
+                //Log.d("mydata", myData.addressArray.toString());
 
-            for (int i =0; i< result.getScanRecord().getManufacturerSpecificData().size();i++){
-                if( result.getScanRecord().getManufacturerSpecificData().get(i) == null)
-                    break;
-                Log.d("test2", result.getScanRecord().getManufacturerSpecificData().get(i).toString());
+
+
+           // StringBuilder builder = new StringBuilder( result.getDevice().getAddress() );
+           // Log.d("builder", builder.toString());
+            for (int i =0; i< result.getDevice().getAddress().length();i++){
+
+                if(result.getDevice().getAddress().equals(result.getDevice().getAddress()))
+                Log.d("test2", result.getDevice().getAddress().toString());
+                Log.d("iiiiiiii", String.valueOf(i));
 
             }
-            data.add(new DataModel(
+            //if(data.get(data.size()-1).getAddress().equals())
+            if(data.size()==0){
+                data.clear();
+                data.add(new DataModel(
+                        myData.nameArray.get(myData.nameArray.size()-1),
+                        myData.addressArray.get(myData.addressArray.size()-1),
+                        myData.valeurArray.get(myData.valeurArray.size()-1),
+                        myData.timeArray.get(myData.timeArray.size()-1)
+                ));
+            }
+            else
+            if(!data.get(data.size()-1).getAddress().contains(myData.addressArray.get(myData.addressArray.size()-1)) )
+                data.add(new DataModel(
                     myData.nameArray.get(myData.nameArray.size()-1),
                     myData.addressArray.get(myData.addressArray.size()-1),
                     myData.valeurArray.get(myData.valeurArray.size()-1),
                     myData.timeArray.get(myData.timeArray.size()-1)
-            ));
+                        ));
+
             Log.d("dataMM + length",data.get(0).getName()+" length : "+data.size());
+
 
             adapter = new CustomAdapter(data);
             recyclerView.setAdapter(adapter);
@@ -232,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
             if (scrollAmount > 0)
                 peripheralTextView.scrollTo(0, scrollAmount);*/
         }
+
     };
 
     @Override

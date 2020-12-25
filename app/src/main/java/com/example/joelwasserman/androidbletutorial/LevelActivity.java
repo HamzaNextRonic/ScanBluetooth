@@ -56,7 +56,7 @@ public class LevelActivity extends AppCompatActivity {
        valueTemperature = getIntent().getStringExtra("valueTemperature");
        /****/
        //valueTemperature="20.5";
-
+    try{
         temperatureBtn.setText(valueTemperature+" °C");
         if(Double.valueOf(valueTemperature) > 20){
 
@@ -84,6 +84,10 @@ public class LevelActivity extends AppCompatActivity {
             temperatureBtn.setText(valueTemperature+" °C");
 
         }
+
+        }catch (Exception e){
+        e.printStackTrace();
+    }
 
 
 
